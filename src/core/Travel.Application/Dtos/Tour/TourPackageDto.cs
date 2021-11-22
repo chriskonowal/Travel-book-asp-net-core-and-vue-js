@@ -7,6 +7,7 @@ namespace Travel.Application.Dtos.Tour
     public class TourPackageDto : IMapFrom<TourPackage>
     {
         public int Id { get; set; }
+        public string WhatToExpect { get; set; }
         public int ListId { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
@@ -15,10 +16,10 @@ namespace Travel.Application.Dtos.Tour
         public void Mapping(Profile profile)
         {
             profile.CreateMap<TourPackage, TourPackageDto>()
-              .ForMember(d =>
-                d.Currency, opt =>
-                opt.MapFrom(s =>
-                  (int)s.Currency));
+              .ForMember(tpDto =>
+                tpDto.Currency, opt =>
+                opt.MapFrom(tp =>
+                  (int)tp.Currency));
         }
     }
 }

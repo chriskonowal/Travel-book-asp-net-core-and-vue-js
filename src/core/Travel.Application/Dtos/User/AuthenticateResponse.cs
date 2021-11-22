@@ -11,6 +11,7 @@ namespace Travel.Application.Dtos.User
         public string LastName { get; set; }
         public string UserName { get; set; }
         public string Token { get; set; }
+        public string Email { get; set; }
         public AuthenticateResponse(Domain.Entities.User user, string token)
         {
             Id = user.Id;
@@ -18,6 +19,7 @@ namespace Travel.Application.Dtos.User
             LastName = user.LastName;
             UserName = user.UserName;
             Token = token;
+            Email = user.Email;
         }
     }
 }

@@ -12,5 +12,7 @@ namespace Travel.Application.Dtos.User
 
         [Required]
         public string Password { get; set; }
+
+        public string Email { get; set; }
     }
 }

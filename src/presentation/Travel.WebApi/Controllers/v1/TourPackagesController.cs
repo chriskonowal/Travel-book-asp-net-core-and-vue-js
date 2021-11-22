@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Travel.Application.Dtos.Tour;
 using Travel.Application.TourPackages.Commands.CreateTourPackage;
 using Travel.Application.TourPackages.Commands.DeleteTourPackage;
 using Travel.Application.TourPackages.Commands.UpdateTourPackage;
 using Travel.Application.TourPackages.Commands.UpdateTourPackageDetail;
+using Travel.Application.TourPackages.Queries;
 
 namespace Travel.WebApi.Controllers.v1
 {
@@ -45,6 +48,12 @@ namespace Travel.WebApi.Controllers.v1
             await Mediator.Send(new DeleteTourPackageCommand { Id = id });
 
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<TourPackageDto>>> GetTourPackages([FromQuery] GetTourPackagesQuery query)
+        {
+            return await Mediator.Send(query);
         }
     }
 }
