@@ -13,6 +13,9 @@ using Travel.WebApi.Helpers;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Travel.Identity;
+using System.Collections.Generic;
+using Travel.Identity.Helpers;
 
 namespace Travel.WebApi
 {
@@ -31,6 +34,7 @@ namespace Travel.WebApi
             services.AddApplication();
             services.AddInfrastructureData();
             services.AddInfrastructureShared(Configuration);
+            services.AddInfrastructureIdentity(Configuration);
 
             services.AddHttpContextAccessor();
 
@@ -45,6 +49,25 @@ namespace Travel.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerDefaultValues>();
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        }, new List<string>()
+                    }
+                });
             });
 
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
@@ -80,6 +103,7 @@ namespace Travel.WebApi
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseMiddleware<JwtMiddleware>();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
